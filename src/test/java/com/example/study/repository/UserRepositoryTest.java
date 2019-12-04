@@ -4,6 +4,7 @@ import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,11 +32,13 @@ public class UserRepositoryTest extends StudyApplicationTests {
     }
 
     @Test
+    @Transactional
     public void read(){
         Optional<User> user = userRepository.findById(1L);
 
         if(user.isPresent()){
-            user.get().getOrderDetailList().stream().forEach(orderDetail -> {
+            User selectUser = user.get();
+            selectUser.getOrderDetailList().stream().forEach(orderDetail -> {
                 System.out.println("item : "+orderDetail.getItem());
             });
         }
