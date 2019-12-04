@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    runtime('mysql:mysql-connector-java')
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.6.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.6.RELEASE'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
@@ -21,6 +21,3 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'
 }
 
-test {
-    useJUnitPlatform()
-}
