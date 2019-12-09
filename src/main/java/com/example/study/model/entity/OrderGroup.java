@@ -1,6 +1,9 @@
 package com.example.study.model.entity;
 
 
+import com.example.study.model.enumClass.OrderGroupStatus;
+import com.example.study.model.enumClass.OrderType;
+import com.example.study.model.enumClass.PaymentStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -27,15 +30,18 @@ public class OrderGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderGroupStatus status;
 
-    private String orderType;
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType;
 
     private String revAddress;
 
     private String revName;
 
-    private String paymentType;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentType;
 
     private BigDecimal totalPrice;
 
