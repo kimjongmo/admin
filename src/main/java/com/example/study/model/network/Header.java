@@ -1,6 +1,7 @@
 package com.example.study.model.network;
 
 
+import com.example.study.model.network.response.Pagination;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,10 @@ public class Header<T> {
     // api 부가 설명
     private String description;
 
+    private Pagination pagination;
+
     private T data;
+
 
 
     public static Header OK() {
@@ -39,6 +43,15 @@ public class Header<T> {
                 .resultCode("OK")
                 .description("OK")
                 .data(data)
+                .build();
+    }
+    public static <T> Header<T> OK(T data,Pagination pagination) {
+        return (Header<T>) Header.builder()
+                .transactionTime(LocalDateTime.now())
+                .resultCode("OK")
+                .description("OK")
+                .data(data)
+                .pagination(pagination)
                 .build();
     }
 

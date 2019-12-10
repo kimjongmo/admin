@@ -1,6 +1,6 @@
 package com.example.study.model.entity;
 
-import com.example.study.model.enumClass.OrderDetailStatus;
+import com.example.study.model.enumClass.OrderStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,7 +28,7 @@ public class OrderDetail {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private OrderDetailStatus status;
+    private OrderStatus status;
 
     private LocalDateTime arrivalDate;
 

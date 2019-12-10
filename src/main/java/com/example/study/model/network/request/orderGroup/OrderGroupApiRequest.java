@@ -1,8 +1,9 @@
 package com.example.study.model.network.request.orderGroup;
 
 import com.example.study.model.enumClass.OrderGroupStatus;
+import com.example.study.model.enumClass.OrderStatus;
 import com.example.study.model.enumClass.OrderType;
-import com.example.study.model.enumClass.PaymentStatus;
+import com.example.study.model.enumClass.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +18,11 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderGroupApiRequest {
     private Long id;
-    private OrderGroupStatus status;
+    private OrderStatus status;
     private OrderType orderType;
     private String revAddress;
     private String revName;
-    private PaymentStatus paymentType;
+    private PaymentType paymentType;
     private BigDecimal totalPrice;
     private Integer totalQuantity;
     private LocalDateTime orderAt;

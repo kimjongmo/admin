@@ -2,6 +2,8 @@ package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.AdminUser;
+import com.example.study.model.enumClass.AdminUserRole;
+import com.example.study.model.enumClass.AdminUserStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +16,10 @@ public class AdminUserRepositoryTest extends StudyApplicationTests {
     private AdminUserRepository adminUserRepository;
 
     @Test
-    public void create(){
-        AdminUser adminUser = new AdminUser();
-        adminUser.setAccount("AdminUser02");
-        adminUser.setPassword("AdminUser02");
-        adminUser.setStatus("REGISTERED");
-        adminUser.setRole("PARTNER");
-        adminUser.setRegisteredAt(LocalDateTime.now());
-
-
-        AdminUser newAdminUser = adminUserRepository.save(adminUser);
-
-        Assert.assertNotNull(newAdminUser);
+    public void create() {
     }
 
     @Test
-    public void update(){
-        AdminUser findAdminUser = adminUserRepository.findById(3L).get();
-        findAdminUser.setAccount("AdminUser002");
-
-        adminUserRepository.save(findAdminUser);
+    public void update() {
     }
 }

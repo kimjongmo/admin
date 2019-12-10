@@ -1,6 +1,6 @@
 package com.example.study.model.network.request.orderDetail;
 
-import com.example.study.model.enumClass.OrderDetailStatus;
+import com.example.study.model.enumClass.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderDetailApiRequest {
     private Long id;
-    private OrderDetailStatus status;
+    private OrderStatus status;
     private LocalDateTime arrivalDate;
     private Integer quantity;
     private BigDecimal totalPrice;
