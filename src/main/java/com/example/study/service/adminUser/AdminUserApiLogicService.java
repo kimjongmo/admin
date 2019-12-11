@@ -4,11 +4,16 @@ package com.example.study.service.adminUser;
 import com.example.study.model.entity.AdminUser;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.adminUser.AdminUserApiRequest;
+import com.example.study.model.network.response.Pagination;
 import com.example.study.model.network.response.adminUser.AdminUserApiResponse;
 import com.example.study.service.BaseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminUserApiLogicService extends BaseService<AdminUserApiRequest, AdminUserApiResponse, AdminUser> {
@@ -28,13 +33,14 @@ public class AdminUserApiLogicService extends BaseService<AdminUserApiRequest, A
 
         AdminUser save = baseRepository.save(adminUser);
 
-        return response(save);
+        return Header.OK(response(save));
     }
 
     @Override
     public Header<AdminUserApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(this::response)
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -50,6 +56,7 @@ public class AdminUserApiLogicService extends BaseService<AdminUserApiRequest, A
                     .setStatus(data.getStatus());
         }).map(u -> baseRepository.save(u))
           .map(this::response)
+          .map(Header::OK)
           .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -62,7 +69,7 @@ public class AdminUserApiLogicService extends BaseService<AdminUserApiRequest, A
                 }).orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<AdminUserApiResponse> response(AdminUser adminUser){
+    private AdminUserApiResponse response(AdminUser adminUser){
         AdminUserApiResponse body = AdminUserApiResponse.builder()
                 .id(adminUser.getId())
                 .account(adminUser.getAccount())
@@ -70,6 +77,21 @@ public class AdminUserApiLogicService extends BaseService<AdminUserApiRequest, A
                 .status(adminUser.getStatus())
                 .role(adminUser.getRole())
                 .build();
-        return Header.OK(body);
+        return body;
+    }
+
+    @Override
+    public Header<List<AdminUserApiResponse>> search(Pageable pageable) {
+        Page<AdminUser> pages = baseRepository.findAll(pageable);
+        List<AdminUserApiResponse> users = pages.stream().map(this::response).collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(pages.getTotalPages())
+                .totalElements(pages.getTotalElements())
+                .currentPage(pages.getNumber())
+                .currentElements(pages.getNumberOfElements())
+                .build();
+
+        return Header.OK(users,pagination);
     }
 }

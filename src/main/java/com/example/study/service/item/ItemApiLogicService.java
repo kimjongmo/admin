@@ -3,14 +3,19 @@ package com.example.study.service.item;
 import com.example.study.model.entity.Item;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.item.ItemApiRequest;
+import com.example.study.model.network.response.Pagination;
 import com.example.study.model.network.response.item.ItemApiResponse;
 import com.example.study.repository.PartnerRepository;
 import com.example.study.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item>{
@@ -90,5 +95,20 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
                 .unregisteredAt(item.getUnregisteredAt())
                 .partnerId(item.getPartner().getId())
                 .build();
+    }
+
+    @Override
+    public Header<List<ItemApiResponse>> search(Pageable pageable) {
+        Page<Item> pages = baseRepository.findAll(pageable);
+        List<ItemApiResponse> users = pages.stream().map(this::response).collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(pages.getTotalPages())
+                .totalElements(pages.getTotalElements())
+                .currentPage(pages.getNumber())
+                .currentElements(pages.getNumberOfElements())
+                .build();
+
+        return Header.OK(users,pagination);
     }
 }

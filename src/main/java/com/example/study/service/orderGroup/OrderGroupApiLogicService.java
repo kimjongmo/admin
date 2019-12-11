@@ -3,14 +3,19 @@ package com.example.study.service.orderGroup;
 import com.example.study.model.entity.OrderGroup;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.orderGroup.OrderGroupApiRequest;
+import com.example.study.model.network.response.Pagination;
 import com.example.study.model.network.response.orderGroup.OrderGroupApiResponse;
 import com.example.study.repository.UserRepository;
 import com.example.study.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,OrderGroupApiResponse,OrderGroup> {
@@ -93,5 +98,20 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                 .arrivalDate(orderGroup.getArrivalDate())
                 .userId(orderGroup.getUser().getId())
                 .build();
+    }
+
+    @Override
+    public Header<List<OrderGroupApiResponse>> search(Pageable pageable) {
+        Page<OrderGroup> pages = baseRepository.findAll(pageable);
+        List<OrderGroupApiResponse> users = pages.stream().map(this::response).collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(pages.getTotalPages())
+                .totalElements(pages.getTotalElements())
+                .currentPage(pages.getNumber())
+                .currentElements(pages.getNumberOfElements())
+                .build();
+
+        return Header.OK(users,pagination);
     }
 }
