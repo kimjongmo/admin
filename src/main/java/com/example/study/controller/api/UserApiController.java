@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:8080"})
+@CrossOrigin
 @RestController
 @RequestMapping("/api/user")
 public class UserApiController extends CrudController<UserApiRequest, UserApiResponse, User> {

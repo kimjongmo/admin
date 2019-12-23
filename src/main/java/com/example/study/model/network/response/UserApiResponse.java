@@ -2,6 +2,7 @@ package com.example.study.model.network.response;
 
 import com.example.study.model.enumClass.UserStatus;
 import com.example.study.model.network.response.orderGroup.OrderGroupApiResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,5 +33,6 @@ public class UserApiResponse {
 
     private LocalDateTime unregisteredAt;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<OrderGroupApiResponse> orderGroupApiResponseList;
 }

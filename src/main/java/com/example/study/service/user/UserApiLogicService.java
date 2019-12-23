@@ -24,12 +24,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse,User> {
+public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
 
     @Autowired
     private OrderGroupApiLogicService orderGroupApiLogicService;
     @Autowired
     private ItemApiLogicService itemApiLogicService;
+
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
 
@@ -68,27 +69,31 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
         return optional.map(user -> {
             user.setAccount(userApiRequest.getAccount())
                     .setPassword(userApiRequest.getPassword())
-                    .setStatus(userApiRequest.getStatus())
                     .setPhoneNumber(userApiRequest.getPhoneNumber())
                     .setEmail(userApiRequest.getEmail())
+                    .setStatus(userApiRequest.getStatus())
                     .setRegisteredAt(userApiRequest.getRegisteredAt())
-                    .setUnregisteredAt(userApiRequest.getUnregisteredAt())
             ;
+            if (userApiRequest.getStatus() == UserStatus.UNREGISTERED && user.getUnregisteredAt() == null) {
+                user.setUnregisteredAt(LocalDateTime.now());
+            } else if (userApiRequest.getStatus() == UserStatus.REGISTERED && user.getUnregisteredAt() != null) {
+                user.setUnregisteredAt(null);
+            }
             return user;
         })
-        .map(user -> baseRepository.save(user))
-        .map(user -> Header.OK(response(user)))
-        .orElseGet(() -> Header.ERROR("데이터 없음"));
+                .map(user -> baseRepository.save(user))
+                .map(user -> Header.OK(response(user)))
+                .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
     @Override
     public Header delete(Long id) {
         Optional<User> optional = baseRepository.findById(id);
-        return optional.map(user->{
+        return optional.map(user -> {
             baseRepository.delete(user);
             return Header.OK();
         })
-        .orElseGet(()->Header.ERROR("데이터 없음"));
+                .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
 
@@ -107,7 +112,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
         return userApiResponse;
     }
 
-    public Header<List<UserApiResponse>> search(Pageable pageable){
+    public Header<List<UserApiResponse>> search(Pageable pageable) {
         Page<User> pages = baseRepository.findAll(pageable);
         List<UserApiResponse> users = pages.stream().map(this::response).collect(Collectors.toList());
 
@@ -118,13 +123,13 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .currentElements(pages.getNumberOfElements())
                 .build();
 
-        return Header.OK(users,pagination);
+        return Header.OK(users, pagination);
     }
 
-    public Header<UserOrderInfoApiResponse> orderInfo(Long id){
+    public Header<UserOrderInfoApiResponse> orderInfo(Long id) {
         Optional<User> optionalUser = baseRepository.findById(id);
 
-        if(!optionalUser.isPresent())
+        if (!optionalUser.isPresent())
             return Header.ERROR("데이터 없음");
 
         User user = optionalUser.get();
