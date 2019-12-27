@@ -1,12 +1,15 @@
 package com.example.study.model.network.response.partner;
 
 import com.example.study.model.enumClass.PartnerStatus;
+import com.example.study.model.network.response.item.ItemApiResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +28,7 @@ public class PartnerApiResponse {
     private LocalDateTime registeredAt;
     private LocalDateTime unregisteredAt;
     private Long categoryId;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<ItemApiResponse> itemList;
 
 }
