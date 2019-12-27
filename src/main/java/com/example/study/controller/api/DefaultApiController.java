@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/default")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 public class DefaultApiController {
 
     @Autowired
